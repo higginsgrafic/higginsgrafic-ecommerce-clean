@@ -246,7 +246,7 @@ const Footer = () => {
                         display: 'block',
                         opacity: 1,
                         filter: collection.id === 'higgins-grafic' ? 'brightness(0) invert(0.96)' : collection.id === 'austen' ? 'brightness(0)' : 'none',
-                        transform: collection.id === 'the-human-inside' ? 'scale(1.18)' : collection.id === 'higgins-grafic' ? 'scale(1.05)' : undefined,
+                        transform: collection.id === 'the-human-inside' ? 'scale(1.18)' : collection.id === 'higgins-grafic' ? 'scale(1.10)' : undefined,
                         transformOrigin: (collection.id === 'the-human-inside' || collection.id === 'higgins-grafic') ? 'center' : undefined
                       }}
                       loading="lazy"
@@ -303,7 +303,7 @@ const Footer = () => {
                     style={{
                       opacity: 1,
                       filter: collection.id === 'higgins-grafic' ? 'brightness(0) invert(0.96)' : collection.id === 'austen' ? 'brightness(0)' : 'none',
-                      transform: collection.id === 'the-human-inside' ? 'scale(1.18)' : collection.id === 'higgins-grafic' ? 'scale(1.05)' : undefined,
+                      transform: collection.id === 'the-human-inside' ? 'scale(1.18)' : collection.id === 'higgins-grafic' ? 'scale(1.10)' : undefined,
                       transformOrigin: (collection.id === 'the-human-inside' || collection.id === 'higgins-grafic') ? 'center' : undefined
                     }}
                     loading="lazy"
