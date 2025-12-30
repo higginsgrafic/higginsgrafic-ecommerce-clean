@@ -10,6 +10,7 @@ import { supabase } from '@/api/supabase-products';
 import { useToast } from '@/components/ui/use-toast';
 import { typography, getTypographyClasses } from '@/config/typography';
 import { useAdmin } from '@/contexts/AdminContext';
+import HeroSettingsPage from '@/pages/HeroSettingsPage';
 
 const useResponsiveFontSize = (config) => {
   const [fontSize, setFontSize] = useState(config.fontSize?.mobile || config.fontSize?.base || '14px');
@@ -56,6 +57,7 @@ function Home({ onAddToCart, cartItems, onUpdateQuantity }) {
   const [tempInterval, setTempInterval] = useState({ seconds: 8, milliseconds: 0 });
   const initialLoadRef = useRef(true);
   const isDragging = useRef(false);
+  const [showHeroSettings, setShowHeroSettings] = useState(false);
 
   const titleFontSize = useResponsiveFontSize(typography.hero.title);
   const subtitleFontSize = useResponsiveFontSize(typography.hero.subtitle);
@@ -379,20 +381,28 @@ function Home({ onAddToCart, cartItems, onUpdateQuantity }) {
       </Helmet>
 
       {/* Hero Editor Section */}
-      <section className="relative h-[70vh] min-h-[500px] overflow-hidden text-center text-white bg-black -mt-[104px] pt-[104px] lg:-mt-[120px] lg:pt-[120px]">
-        <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none h-16 lg:h-20 bg-white" />
-        {!editMode && (
-          <motion.div
-            className="absolute left-0 right-0 bottom-0 z-30 cursor-pointer active:cursor-grabbing"
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.2}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-            onClick={handleContainerClick}
-            style={{ touchAction: 'pan-y', top: 'var(--appHeaderOffset, 0px)' }}
+      {showHeroSettings ? (
+        <div className="relative -mt-[104px] pt-[104px] lg:-mt-[120px] lg:pt-[120px]">
+          <HeroSettingsPage
+            mode="embedded"
+            onRequestClose={() => setShowHeroSettings(false)}
           />
-        )}
+        </div>
+      ) : (
+        <section className="relative h-[70vh] min-h-[500px] overflow-hidden text-center text-white bg-black -mt-[104px] pt-[104px] lg:-mt-[120px] lg:pt-[120px]">
+          <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none h-16 lg:h-20 bg-white" />
+          {!editMode && (
+            <motion.div
+              className="absolute left-0 right-0 bottom-0 z-30 cursor-pointer active:cursor-grabbing"
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+              onClick={handleContainerClick}
+              style={{ touchAction: 'pan-y', top: 'var(--appHeaderOffset, 0px)' }}
+            />
+          )}
 
         <AnimatePresence mode='wait'>
           <motion.div
@@ -574,15 +584,15 @@ function Home({ onAddToCart, cartItems, onUpdateQuantity }) {
                 </div>
                 <div className="w-8 flex items-center justify-center shrink-0">
                   <button
-                    onClick={() => setEditMode(!editMode)}
+                    onClick={() => setShowHeroSettings((v) => !v)}
                     className={`transition-colors ${
                       editMode
                         ? 'text-white'
                         : 'text-white/50 hover:text-white/80'
                     }`}
-                    aria-label={editMode ? 'Desactivar mode edició' : 'Activar mode edició'}
+                    aria-label={showHeroSettings ? 'Tancar hero settings' : 'Obrir hero settings'}
                   >
-                    {editMode ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
+                    {showHeroSettings ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
@@ -684,7 +694,8 @@ function Home({ onAddToCart, cartItems, onUpdateQuantity }) {
             )}
           </div>
         </div>
-      </section>
+        </section>
+      )}
 
       {/* Delete Confirmation Dialog */}
       <AnimatePresence>
