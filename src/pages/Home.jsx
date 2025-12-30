@@ -390,7 +390,6 @@ function Home({ onAddToCart, cartItems, onUpdateQuantity }) {
         </div>
       ) : (
         <section className="relative h-[70vh] min-h-[500px] overflow-hidden text-center text-white bg-black -mt-[104px] pt-[104px] lg:-mt-[120px] lg:pt-[120px]">
-          <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none h-16 lg:h-20 bg-white" />
           {!editMode && (
             <motion.div
               className="absolute left-0 right-0 bottom-0 z-30 cursor-pointer active:cursor-grabbing"
