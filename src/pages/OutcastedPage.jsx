@@ -5,6 +5,7 @@ import ProductGrid from '@/components/ProductGrid';
 import { useProductContext } from '@/contexts/ProductContext';
 import { useTexts } from '@/hooks/useTexts';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import FullBleedUnderHeader from '@/components/FullBleedUnderHeader';
 
 function OutcastedPage({ onAddToCart, cartItems, onUpdateQuantity }) {
   const texts = useTexts();
@@ -19,10 +20,7 @@ function OutcastedPage({ onAddToCart, cartItems, onUpdateQuantity }) {
       </Helmet>
 
       <div className="min-h-screen bg-white">
-        <div
-          className="bg-gradient-to-br from-gray-900 via-stone-900 to-neutral-900 text-white py-16 lg:py-24"
-          style={{ marginTop: 'calc(var(--appHeaderOffset, 0px) * -1)', paddingTop: 'var(--appHeaderOffset, 0px)' }}
-        >
+        <FullBleedUnderHeader className="bg-gradient-to-br from-gray-900 via-stone-900 to-neutral-900 text-white py-16 lg:py-24">
           <div className="max-w-7xl mx-auto px-4 lg:px-8">
             <div className="mb-8">
               <Breadcrumbs
@@ -47,7 +45,7 @@ function OutcastedPage({ onAddToCart, cartItems, onUpdateQuantity }) {
               </p>
             </motion.div>
           </div>
-        </div>
+        </FullBleedUnderHeader>
 
         <div className="max-w-7xl mx-auto px-4 lg:px-8 py-16 lg:py-24">
           <motion.div
