@@ -18,6 +18,8 @@ const Footer = () => {
   const [tabletLeftColumn, setTabletLeftColumn] = useState(0);
   const [tabletRightColumn, setTabletRightColumn] = useState(0);
   const [isTablet, setIsTablet] = useState(false);
+  const [higginsAlignYDesktop, setHigginsAlignYDesktop] = useState(0);
+  const [higginsAlignYMobile, setHigginsAlignYMobile] = useState(0);
   const texts = useTexts();
   const { getDebugStyle, isSectionEnabled } = useGridDebug();
 
@@ -97,6 +99,36 @@ const Footer = () => {
       setGapToLogo(leftPosition); // Alinear amb el final del logo del header
     };
 
+    const calculateHigginsAlignment = () => {
+      try {
+        // Desktop: align Higgins top with Cube top
+        if (menuGroupRef.current) {
+          const cubeImg = menuGroupRef.current.querySelector('img[data-collection-id="cube"]');
+          const higginsImg = menuGroupRef.current.querySelector('img[data-collection-id="higgins-grafic"]');
+          if (cubeImg && higginsImg) {
+            const cubeRect = cubeImg.getBoundingClientRect();
+            const higginsRect = higginsImg.getBoundingClientRect();
+            const delta = cubeRect.top - higginsRect.top;
+            setHigginsAlignYDesktop(Number.isFinite(delta) ? Math.round(delta) : 0);
+          }
+        }
+
+        // Mobile: align Higgins top with Cube top
+        if (mobileContainerRef.current) {
+          const cubeImg = mobileContainerRef.current.querySelector('img[data-collection-id="cube"]');
+          const higginsImg = mobileContainerRef.current.querySelector('img[data-collection-id="higgins-grafic"]');
+          if (cubeImg && higginsImg) {
+            const cubeRect = cubeImg.getBoundingClientRect();
+            const higginsRect = higginsImg.getBoundingClientRect();
+            const delta = cubeRect.top - higginsRect.top;
+            setHigginsAlignYMobile(Number.isFinite(delta) ? Math.round(delta) : 0);
+          }
+        }
+      } catch {
+        // no-op
+      }
+    };
+
     const calculateMobileGap = () => {
       // Mobile gaps calculation
       if (!mobileContainerRef.current) return;
@@ -168,12 +200,15 @@ const Footer = () => {
     calculateGap();
     calculateMobileGap();
     calculateTabletColumns();
+    // Align after initial layout
+    requestAnimationFrame(calculateHigginsAlignment);
 
     const handleResize = () => {
       checkIfTablet();
       calculateGap();
       calculateMobileGap();
       calculateTabletColumns();
+      requestAnimationFrame(calculateHigginsAlignment);
     };
 
     window.addEventListener('resize', handleResize);
@@ -183,16 +218,19 @@ const Footer = () => {
       calculateGap();
       calculateMobileGap();
       calculateTabletColumns();
+      calculateHigginsAlignment();
     }, 100);
     setTimeout(() => {
       calculateGap();
       calculateMobileGap();
       calculateTabletColumns();
+      calculateHigginsAlignment();
     }, 500);
     setTimeout(() => {
       calculateGap();
       calculateMobileGap();
       calculateTabletColumns();
+      calculateHigginsAlignment();
     }, 1000);
 
     return () => {
@@ -239,6 +277,7 @@ const Footer = () => {
                     <img
                       src={collection.icon}
                       alt={collection.name}
+                      data-collection-id={collection.id}
                       className={`transition-transform duration-300 w-full h-auto object-contain ${
                         collection.id === 'higgins-grafic' ? '' : 'group-hover:scale-110'
                       }`}
@@ -246,7 +285,11 @@ const Footer = () => {
                         display: 'block',
                         opacity: 1,
                         filter: collection.id === 'higgins-grafic' ? 'brightness(0) invert(0.96)' : collection.id === 'austen' ? 'brightness(0)' : 'none',
-                        transform: collection.id === 'the-human-inside' ? 'scale(1.18)' : collection.id === 'higgins-grafic' ? 'scale(1.10)' : undefined,
+                        transform: collection.id === 'the-human-inside'
+                          ? 'scale(1.18)'
+                          : collection.id === 'higgins-grafic'
+                            ? `translateY(${higginsAlignYDesktop}px) scale(1.10)`
+                            : undefined,
                         transformOrigin: (collection.id === 'the-human-inside' || collection.id === 'higgins-grafic') ? 'center' : undefined
                       }}
                       loading="lazy"
@@ -297,13 +340,18 @@ const Footer = () => {
                   <img
                     src={collection.icon}
                     alt={collection.name}
+                    data-collection-id={collection.id}
                     className={`w-full h-auto object-contain block transition-transform duration-300 ${
                       collection.id === 'higgins-grafic' ? '' : 'group-hover:scale-110'
                     }`}
                     style={{
                       opacity: 1,
                       filter: collection.id === 'higgins-grafic' ? 'brightness(0) invert(0.96)' : collection.id === 'austen' ? 'brightness(0)' : 'none',
-                      transform: collection.id === 'the-human-inside' ? 'scale(1.18)' : collection.id === 'higgins-grafic' ? 'scale(1.10)' : undefined,
+                      transform: collection.id === 'the-human-inside'
+                        ? 'scale(1.18)'
+                        : collection.id === 'higgins-grafic'
+                          ? `translateY(${higginsAlignYMobile}px) scale(1.10)`
+                          : undefined,
                       transformOrigin: (collection.id === 'the-human-inside' || collection.id === 'higgins-grafic') ? 'center' : undefined
                     }}
                     loading="lazy"
