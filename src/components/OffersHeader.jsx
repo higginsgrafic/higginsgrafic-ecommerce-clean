@@ -16,7 +16,7 @@ const OffersHeader = ({ adminBannerVisible = false }) => {
   const SHOW_DOWNLOAD_BANNER = false;
 
   // Determinar si s'ha de mostrar (mentre carrega o quan està enabled)
-  const shouldShow = enabled;
+  const shouldShow = enabled && !loading;
 
   // Determinar si és clicable
   const isClickable = clickable && link;
@@ -102,7 +102,7 @@ const OffersHeader = ({ adminBannerVisible = false }) => {
 
       {/* Banner animat d'ofertes */}
       <motion.div
-        className="fixed top-0 left-0 right-0 z-50 text-white text-sm flex items-center px-4 sm:px-6 lg:px-8 overflow-hidden"
+        className={`fixed top-0 left-0 right-0 z-50 text-white text-sm flex items-center px-4 sm:px-6 lg:px-8 overflow-hidden ${isClickable ? 'pointer-events-auto' : 'pointer-events-none'}`}
         initial={false}
         animate={{
           height: shouldShow ? '40px' : '0px',
