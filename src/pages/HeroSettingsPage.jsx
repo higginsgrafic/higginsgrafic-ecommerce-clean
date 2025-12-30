@@ -32,7 +32,7 @@ const useResponsiveFontSize = (config) => {
 export default function HeroSettingsPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isAdmin } = useAdmin();
+  const { isAdmin, editMode, setEditMode } = useAdmin();
   const [slides, setSlides] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [autoplay, setAutoplay] = useState(true);
@@ -41,7 +41,6 @@ export default function HeroSettingsPage() {
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState(null);
   const [activeTab, setActiveTab] = useState('text');
-  const [editMode, setEditMode] = useState(location.state?.editMode || false);
   const [searchDialog, setSearchDialog] = useState({ open: false, type: null });
   const [searchQuery, setSearchQuery] = useState('');
   const [deleteConfirmDialog, setDeleteConfirmDialog] = useState(false);
@@ -56,6 +55,14 @@ export default function HeroSettingsPage() {
       navigate('/', { replace: true });
     }
   }, [isAdmin, navigate]);
+
+  useEffect(() => {
+    // If navigated here with state.editMode, enable global editMode.
+    // This keeps behavior stable even if the user refreshes or navigates between admin tools.
+    if (location?.state?.editMode) {
+      setEditMode(true);
+    }
+  }, [location?.state, setEditMode]);
 
   const titleFontSize = useResponsiveFontSize(typography.hero.title);
   const subtitleFontSize = useResponsiveFontSize(typography.hero.subtitle);

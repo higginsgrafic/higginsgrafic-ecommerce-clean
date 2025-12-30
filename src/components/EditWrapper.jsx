@@ -9,7 +9,7 @@ export default function EditWrapper({
   section = 'section',
   className = ''
 }) {
-  const { isAdmin, editMode } = useAdmin();
+  const { isAdmin, editMode, setEditMode } = useAdmin();
   const navigate = useNavigate();
 
   if (!isAdmin) {
@@ -17,6 +17,7 @@ export default function EditWrapper({
   }
 
   const handleEditClick = () => {
+    setEditMode(true);
     navigate(editPath, { state: { editMode: true } });
   };
 
