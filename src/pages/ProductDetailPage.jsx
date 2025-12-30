@@ -1008,19 +1008,18 @@ const ProductDetailPage = ({ onAddToCart, cartItems = [], onUpdateQuantity }) =>
     navigate('/checkout');
   };
 
-  const getCollectionLogoSrc = (collection) => {
+  const getCollectionLogo = (collection) => {
     switch (collection) {
+      case 'austen':
+        return '/custom_logos/collections/collection-jean-austen-logo.svg';
       case 'cube':
         return '/custom_logos/collections/collection-cube-logo.svg';
       case 'first-contact':
         return '/custom_logos/collections/collection-first-contact-logo.svg';
-      case 'austen':
-      case 'jean-austen':
-        return '/custom_logos/collections/collection-jean-austen-logo.svg';
       case 'outcasted':
         return '/custom_logos/collections/collection-outcasted-logo.svg';
       default:
-        return '/custom_logos/collections/collection-thin-square-logo-5.svg';
+        return '/custom_logos/collections/collection-thin-logo.png';
     }
   };
 
