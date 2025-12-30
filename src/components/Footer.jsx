@@ -356,8 +356,8 @@ const Footer = () => {
             <div className="text-left">
               <p className="font-oswald font-semibold mb-3 lg:mb-4 text-[13pt] lg:text-[14pt] text-gray-900">{texts.footer.services.shop.title}</p>
               <ul className="space-y-2.5 lg:space-y-3 text-left">
-                <li><Link to="/new" className="font-roboto text-[12pt] font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.shop.new}</Link></li>
-                <li><Link to="/offers" className="font-roboto text-[12pt] font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.shop.offers}</Link></li>
+                <li><Link to="/new" className="font-roboto text-sm font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.shop.new}</Link></li>
+                <li><Link to="/offers" className="font-roboto text-sm font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.shop.offers}</Link></li>
               </ul>
             </div>
 
@@ -365,10 +365,10 @@ const Footer = () => {
             <div className="text-left">
               <p className="font-oswald font-semibold mb-3 lg:mb-4 text-[13pt] lg:text-[14pt] text-gray-900">{texts.footer.services.customer.title}</p>
               <ul className="space-y-2.5 lg:space-y-3 text-left">
-                <li><Link to="/shipping" className="font-roboto text-[12pt] font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.customer.shipping}</Link></li>
-                <li><Link to="/status" className="font-roboto text-[12pt] font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.customer.orderStatus}</Link></li>
-                <li><Link to="/track" className="font-roboto text-[12pt] font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>Seguiment comanda</Link></li>
-                <li><Link to="/sizing" className="font-roboto text-[12pt] font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.customer.sizing}</Link></li>
+                <li><Link to="/shipping" className="font-roboto text-sm font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.customer.shipping}</Link></li>
+                <li><Link to="/status" className="font-roboto text-sm font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.customer.orderStatus}</Link></li>
+                <li><Link to="/track" className="font-roboto text-sm font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>Seguiment comanda</Link></li>
+                <li><Link to="/sizing" className="font-roboto text-sm font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.customer.sizing}</Link></li>
               </ul>
             </div>
 
@@ -376,9 +376,9 @@ const Footer = () => {
             <div className="text-left">
               <p className="font-oswald font-semibold mb-3 lg:mb-4 text-[13pt] lg:text-[14pt] text-gray-900">{texts.footer.services.info.title}</p>
               <ul className="space-y-2.5 lg:space-y-3 text-left">
-                <li><Link to="/contact" className="font-roboto text-[12pt] font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.info.contact}</Link></li>
-                <li><Link to="/about" className="font-roboto text-[12pt] font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.info.about}</Link></li>
-                <li><Link to="/faq" className="font-roboto text-[12pt] font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.info.faq}</Link></li>
+                <li><Link to="/contact" className="font-roboto text-sm font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.info.contact}</Link></li>
+                <li><Link to="/about" className="font-roboto text-sm font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.info.about}</Link></li>
+                <li><Link to="/faq" className="font-roboto text-sm font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.info.faq}</Link></li>
               </ul>
             </div>
 
@@ -386,8 +386,8 @@ const Footer = () => {
             <div className="text-left">
               <p className="font-oswald font-semibold mb-3 lg:mb-4 text-[13pt] lg:text-[14pt] text-gray-900">{texts.footer.services.legal.title}</p>
               <ul className="space-y-2.5 lg:space-y-3 text-left">
-                <li><Link to="/privacy" className="font-roboto text-[12pt] font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.legal.privacy}</Link></li>
-                <li><Link to="/terms" className="font-roboto text-[12pt] font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.legal.terms}</Link></li>
+                <li><Link to="/privacy" className="font-roboto text-sm font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.legal.privacy}</Link></li>
+                <li><Link to="/terms" className="font-roboto text-sm font-normal transition-all inline-block text-gray-900" onMouseEnter={(e) => { const color = document.documentElement.classList.contains('dark') ? '#ffffff' : '#141414'; e.target.style.textShadow = `0 0 0.55px ${color}, 0 0 0.55px ${color}`; }} onMouseLeave={(e) => e.target.style.textShadow = 'none'}>{texts.footer.services.legal.terms}</Link></li>
               </ul>
             </div>
 
@@ -396,12 +396,12 @@ const Footer = () => {
               <p className="font-oswald font-semibold mb-3 lg:mb-4 text-[13pt] lg:text-[14pt] text-gray-900">{texts.footer.services.language.title}</p>
               <ul className="space-y-2.5 lg:space-y-3 text-left">
                 <li>
-                  <span className="font-roboto text-[12pt] font-bold text-gray-900">
+                  <span className="font-roboto text-sm font-bold text-gray-900">
                     Català
                   </span>
                 </li>
                 <li>
-                  <span className="font-roboto text-[12pt] font-normal cursor-not-allowed text-gray-900" style={{ opacity: 0.3 }}>
+                  <span className="font-roboto text-sm font-normal cursor-not-allowed text-gray-900" style={{ opacity: 0.3 }}>
                     English
                   </span>
                 </li>
