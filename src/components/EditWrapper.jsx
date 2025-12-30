@@ -9,7 +9,7 @@ export default function EditWrapper({
   section = 'section',
   className = ''
 }) {
-  const { isAdmin } = useAdmin();
+  const { isAdmin, editMode } = useAdmin();
   const navigate = useNavigate();
 
   if (!isAdmin) {
@@ -25,7 +25,7 @@ export default function EditWrapper({
       {children}
       <button
         onClick={handleEditClick}
-        className="absolute top-4 right-4 z-50 p-2 bg-blue-600 text-white rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue-700"
+        className={`absolute top-4 right-4 z-[11000] p-2 bg-blue-600 text-white rounded-lg shadow-lg transition-opacity hover:bg-blue-700 ${editMode ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
         title={`Editar ${section}`}
       >
         <Edit3 className="w-5 h-5" />
