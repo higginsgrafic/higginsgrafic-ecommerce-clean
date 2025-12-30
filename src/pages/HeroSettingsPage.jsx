@@ -57,6 +57,13 @@ export default function HeroSettingsPage() {
   }, [isAdmin, navigate]);
 
   useEffect(() => {
+    // This page is an admin tool; default to edit mode when the user is admin.
+    if (isAdmin && !editMode) {
+      setEditMode(true);
+    }
+  }, [isAdmin, editMode, setEditMode]);
+
+  useEffect(() => {
     // If navigated here with state.editMode, enable global editMode.
     // This keeps behavior stable even if the user refreshes or navigates between admin tools.
     if (location?.state?.editMode) {

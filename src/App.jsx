@@ -332,7 +332,7 @@ function App() {
     <ErrorBoundary>
       <>
         <SkipLink />
-        {isNavigating && <LoadingScreen />}
+        {isNavigating && !isAdminRoute && <LoadingScreen />}
 
 
 
