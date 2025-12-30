@@ -514,7 +514,10 @@ function Home({ onAddToCart, cartItems, onUpdateQuantity }) {
             )}
 
             {isAdmin && (
-              <div className="absolute right-6 top-0 h-8 flex items-center gap-3">
+              <div
+                className="fixed right-6 z-[12000] h-8 flex items-center gap-3"
+                style={{ top: 'calc(var(--appHeaderOffset, 0px) + 12px)' }}
+              >
                 <div className="min-w-[280px] flex items-center justify-end">
                   <AnimatePresence mode="wait">
                     {editMode && activeTab === 'text' && (
