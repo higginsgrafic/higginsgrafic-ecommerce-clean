@@ -382,7 +382,13 @@ function Home({ onAddToCart, cartItems, onUpdateQuantity }) {
 
       {/* Hero Editor Section */}
       {showHeroSettings ? (
-        <div className="relative" style={{ paddingTop: 'var(--appHeaderOffset, 0px)' }}>
+        <div
+          className="relative"
+          style={{
+            marginTop: 'calc(var(--appHeaderOffset, 0px) * -1)',
+            paddingTop: 'var(--appHeaderOffset, 0px)'
+          }}
+        >
           <HeroSettingsPage
             mode="embedded"
             onRequestClose={() => setShowHeroSettings(false)}
@@ -391,7 +397,10 @@ function Home({ onAddToCart, cartItems, onUpdateQuantity }) {
       ) : (
         <section
           className="relative h-[70vh] min-h-[500px] overflow-hidden text-center text-white bg-black"
-          style={{ paddingTop: 'var(--appHeaderOffset, 0px)' }}
+          style={{
+            marginTop: 'calc(var(--appHeaderOffset, 0px) * -1)',
+            paddingTop: 'var(--appHeaderOffset, 0px)'
+          }}
         >
           {!editMode && (
             <motion.div
