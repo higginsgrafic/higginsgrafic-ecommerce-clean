@@ -43,7 +43,7 @@ const Footer = () => {
     { id: 'the-human-inside', name: texts.footer.collections.theHumanInside, path: '/the-human-inside', icon: '/custom_logos/collections/collection-thin-square-logo-5.svg' },
     { id: 'austen', name: texts.footer.collections.austen, path: '/austen', icon: '/custom_logos/collections/collection-jean-austen-logo.svg' },
     { id: 'outcasted', name: texts.footer.collections.outcasted, path: '/outcasted', icon: '/custom_logos/collections/collection-outcasted-logo.svg' },
-    { id: 'higgins-grafic', name: 'HIGGINS GRÀFIC', path: '/higginsgrafic', icon: '/custom_logos/brand/marca-grup-higgins-logo.svg' },
+    { id: 'higgins-grafic', name: 'HIGGINS GRÀFIC', path: '/higginsgrafic', icon: '/custom_logos/brand/grup-higgins-logo.svg' },
     { id: 'cube', name: texts.footer.collections.cube, path: '/cube', icon: '/custom_logos/collections/collection-cube-logo.svg' }
   ];
 
@@ -54,7 +54,7 @@ const Footer = () => {
     { id: 'austen', name: texts.footer.collections.austen, path: '/austen', icon: '/custom_logos/collections/collection-jean-austen-logo.svg' },
     { id: 'outcasted', name: texts.footer.collections.outcasted, path: '/outcasted', icon: '/custom_logos/collections/collection-outcasted-logo.svg' },
     { id: 'cube', name: texts.footer.collections.cube, path: '/cube', icon: '/custom_logos/collections/collection-cube-logo.svg' },
-    { id: 'higgins-grafic', name: 'HIGGINS GRÀFIC', path: '/higginsgrafic', icon: '/custom_logos/brand/marca-grup-higgins-logo.svg' }
+    { id: 'higgins-grafic', name: 'HIGGINS GRÀFIC', path: '/higginsgrafic', icon: '/custom_logos/brand/grup-higgins-logo.svg' }
   ];
 
   useEffect(() => {
