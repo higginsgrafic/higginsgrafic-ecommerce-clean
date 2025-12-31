@@ -25,7 +25,14 @@ supabase/.temp
 *.njsproj
 *.sln
 *.sw?
+
 .env
 
 store_products_export.csv
 store_products_full.csv
+
+# Local Netlify folder
+.netlify
+
+.windsurf
+test-results
