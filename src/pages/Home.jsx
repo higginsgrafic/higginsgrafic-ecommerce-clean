@@ -440,11 +440,22 @@ function Home({ onAddToCart, cartItems, onUpdateQuantity }) {
 
         <div
           className="absolute left-0 right-0 z-[10002]"
-          style={{ top: 'calc(var(--appHeaderOffset, 0px) + 12px)' }}
+          style={{ top: 'calc(var(--appHeaderOffset, 40px) + 12px)' }}
         >
           <div className="relative h-8 px-6">
+            {isAdmin && (
+              <div className="absolute left-6 top-0 h-8 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-white/80 select-none">
+                <span className="px-2 py-0.5 rounded bg-white/10 border border-white/15">DEV</span>
+                <button type="button" onClick={() => navigate('/nike-hero-demo')} className="text-white/70 hover:text-white transition-colors">Nike Hero</button>
+                <span className="text-white/30">/</span>
+                <button type="button" onClick={() => navigate('/nike-tambe')} className="text-white/70 hover:text-white transition-colors">Nike També</button>
+                <span className="text-white/30">/</span>
+                <button type="button" onClick={() => navigate('/adidas-demo')} className="text-white/70 hover:text-white transition-colors">Adidas</button>
+              </div>
+            )}
+
             {isAdmin && editMode && (
-              <div className="absolute left-6 top-0 h-8 flex items-center gap-3 text-xs font-medium uppercase tracking-wide">
+              <div className="absolute left-[320px] top-0 h-8 flex items-center gap-3 text-xs font-medium uppercase tracking-wide">
                 <button
                   onClick={() => setActiveTab('text')}
                   className={`transition-colors ${
@@ -529,7 +540,7 @@ function Home({ onAddToCart, cartItems, onUpdateQuantity }) {
             )}
 
             {isAdmin && (
-              <div className="absolute right-6 top-6 z-[12000] h-8 flex items-center gap-3">
+              <div className="absolute right-6 top-0 z-[12000] h-8 flex items-center gap-3">
                 <div className="min-w-[280px] flex items-center justify-end">
                   <AnimatePresence mode="wait">
                     {editMode && activeTab === 'text' && (
@@ -586,13 +597,12 @@ function Home({ onAddToCart, cartItems, onUpdateQuantity }) {
                 </div>
 
                 <button
-                  onClick={() => setShowHeroSettings((s) => !s)}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors shadow-lg border border-white/20 ${
-                    showHeroSettings
-                      ? 'bg-white text-black hover:bg-white/90'
-                      : 'bg-black/60 text-white hover:bg-black/70'
-                  }`}
-                  aria-label={showHeroSettings ? 'Tancar hero settings' : 'Obrir hero settings'}
+                  onClick={() => {
+                    setShowHeroSettings(false);
+                    navigate('/hero-settings', { state: { editMode: true } });
+                  }}
+                  className="w-8 h-8 flex items-center justify-center bg-transparent text-white/90 hover:text-white transition-colors"
+                  aria-label="Obrir hero settings"
                 >
                   {showHeroSettings ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
                 </button>

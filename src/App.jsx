@@ -78,12 +78,10 @@ const AdminUploadPage = lazy(() => import('@/pages/AdminUploadPage'));
 const AdminVisualOptimizerPage = lazy(() => import('@/pages/AdminVisualOptimizerPage'));
 
 const NikeHeroDemoPage = lazy(() => import('@/pages/NikeHeroDemoPage'));
-const NikeHeaderDemoPage = lazy(() => import('@/pages/NikeHeaderDemoPage'));
 const NikeTambePage = lazy(() => import('@/pages/NikeTambePage'));
-const AppleDemoPage = lazy(() => import('@/pages/AppleDemoPage'));
 const AdidasDemoPage = lazy(() => import('@/pages/AdidasDemoPage'));
-const AdidasDemoTmpPage = lazy(() => import('@/pages/AdidasDemoTmpPage'));
 const AdidasStripeZoomDevPage = lazy(() => import('@/pages/AdidasStripeZoomDevPage'));
+const DevLinksPage = lazy(() => import('@/pages/DevLinksPage'));
 
 // Pàgines administratives
 const AppsPage = lazy(() => import('@/pages/AppsPage'));
@@ -253,8 +251,7 @@ function App() {
   const isNikeDemoRoute = location.pathname === '/nike-hero-demo' || location.pathname === '/nike-tambe';
   const isNikeHeroDemoRoute = location.pathname === '/nike-hero-demo';
   const isAdidasDemoRoute = location.pathname === '/adidas-demo' || location.pathname.startsWith('/adidas-demo/');
-  const isAppleDemoRoute = location.pathname === '/apple-demo';
-  const isDevDemoRoute = isNikeDemoRoute || isAdidasDemoRoute || isAppleDemoRoute;
+  const isDevDemoRoute = isNikeDemoRoute || isAdidasDemoRoute;
   const layoutInspectorActive = (isAdmin || isDevDemoRoute) && location.pathname !== '/ec-preview' && layoutInspectorEnabled;
 
   const [nikeDemoManualEnabled, setNikeDemoManualEnabled] = useState(false);
@@ -662,8 +659,6 @@ function App() {
             <span className="text-gray-300">/</span>
             <button type="button" onClick={() => navigate('/adidas-demo')} className="hover:text-black">Adidas</button>
             <span className="text-gray-300">/</span>
-            <button type="button" onClick={() => navigate('/apple-demo')} className="hover:text-black">Apple</button>
-            <span className="text-gray-300">/</span>
             <button type="button" onClick={() => navigate('/hero-settings')} className="hover:text-black">Hero Settings</button>
           </div>
         </div>
@@ -888,10 +883,9 @@ function App() {
                 <Route path="/offers" element={<OffersPage />} />
 
                 <Route path="/new" element={<NewPage />} />
-                <Route path="/apple-demo" element={<AppleDemoPage />} />
                 <Route path="/adidas-demo" element={<AdidasDemoPage />} />
-                <Route path="/adidas-demo/tmp" element={<AdidasDemoTmpPage />} />
                 <Route path="/adidas-stripe-zoom-dev" element={<AdidasStripeZoomDevPage />} />
+                <Route path="/dev-links" element={<DevLinksPage />} />
                 <Route path="/nike-hero-demo" element={<NikeHeroDemoPage />} />
                 <Route path="/nike-tambe" element={<NikeTambePage />} />
                 <Route path="/status" element={<OrderStatusPage />} />
