@@ -13,6 +13,11 @@ export default defineConfig({
     },
     extensions: ['.js', '.jsx', '.json'],
   },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    include: ['tests/unit/**/*.test.{js,jsx}', 'tests/unit/**/*.spec.{js,jsx}'],
+  },
   server: {
     host: '0.0.0.0',
     port: 3003,

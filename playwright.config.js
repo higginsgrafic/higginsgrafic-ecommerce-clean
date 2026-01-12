@@ -11,7 +11,7 @@ const config = {
   },
   retries: 0,
   use: {
-    baseURL: 'http://127.0.0.1:3000',
+    baseURL: 'http://127.0.0.1:3003',
     viewport: { width: 1440, height: 900 },
     screenshot: 'only-on-failure',
     trace: 'retain-on-failure',
@@ -33,7 +33,7 @@ const config = {
   ],
   webServer: {
     command: 'npm run build && npm run preview',
-    url: 'http://127.0.0.1:3000',
+    url: 'http://127.0.0.1:3003',
     reuseExistingServer: true,
     timeout: 120_000,
   },
