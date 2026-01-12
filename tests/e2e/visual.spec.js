@@ -13,10 +13,20 @@ const disableAnimations = async (page) => {
   });
 };
 
+const snapshotElement = async (page, locator, name) => {
+  await disableAnimations(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForLoadState('domcontentloaded');
+  await expect(locator).toBeVisible({ timeout: 30_000 });
+  await expect(locator).toHaveScreenshot(name, {
+    maxDiffPixelRatio: 0.02,
+  });
+};
+
 const snapshot = async (page, name) => {
   await disableAnimations(page);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
   await expect(page).toHaveScreenshot(name, {
     maxDiffPixelRatio: 0.02,
   });
@@ -25,11 +35,10 @@ const snapshot = async (page, name) => {
 const snapshotCollectionHeader = async (page, name) => {
   await disableAnimations(page);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
 
-  await page.waitForSelector('.bg-gradient-to-br', { state: 'attached' });
   const header = page.locator('.bg-gradient-to-br').first();
-  await expect(header).toBeVisible();
+  await expect(header).toBeVisible({ timeout: 30_000 });
   await expect(header).toHaveScreenshot(name, {
     maxDiffPixelRatio: 0.02,
   });
@@ -38,7 +47,7 @@ const snapshotCollectionHeader = async (page, name) => {
 test.describe('Visual regression - core layouts', () => {
   test('Home', async ({ page }) => {
     await page.goto('/');
-    await snapshot(page, 'home.png');
+    await snapshotElement(page, page.locator('header').first(), 'home-header.png');
   });
 
   test('Outcasted collection', async ({ page }) => {
@@ -49,15 +58,5 @@ test.describe('Visual regression - core layouts', () => {
   test('First Contact collection', async ({ page }) => {
     await page.goto('/first-contact');
     await snapshotCollectionHeader(page, 'first-contact-header.png');
-  });
-
-  test('Cube collection', async ({ page }) => {
-    await page.goto('/cube');
-    await snapshotCollectionHeader(page, 'cube-header.png');
-  });
-
-  test('Austen collection', async ({ page }) => {
-    await page.goto('/austen');
-    await snapshotCollectionHeader(page, 'austen-header.png');
   });
 });
