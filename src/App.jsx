@@ -21,8 +21,8 @@ import Cart from '@/components/Cart';
 import UserSidebar from '@/components/UserSidebar';
 import Checkout from '@/components/Checkout';
 import AdminStudioLayout from '@/components/AdminStudioLayout';
-import SupabaseCollectionRoute from '@/pages/SupabaseCollectionRoute';
-import DevGuidesOverlay from '@/components/DevGuidesOverlay';
+import SupabaseCollectionRoute from '@/pages/SupabaseCollectionRoute.jsx';
+import DevGuidesOverlay from '@/components/DevGuidesOverlay.jsx';
 
 const FulfillmentPage = lazy(() => import('@/pages/FulfillmentPage'));
 const FulfillmentSettingsPage = lazy(() => import('@/pages/FulfillmentSettingsPage'));
@@ -41,8 +41,6 @@ const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 const OffersPage = lazy(() => import('@/pages/OffersPage'));
 const ProductDetailPage = lazy(() => import('@/pages/ProductDetailPage'));
-const ProvesCollectionPage = lazy(() => import('@/pages/ProvesCollectionPage'));
-const ProvesProductDetailPage = lazy(() => import('@/pages/ProvesProductDetailPage'));
 const OrderConfirmationPage = lazy(() => import('@/pages/OrderConfirmationPage'));
 const SearchPage = lazy(() => import('@/pages/SearchPage'));
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
@@ -75,10 +73,8 @@ const GelatoProductsManagerPage = lazy(() => import('@/pages/GelatoProductsManag
 const ProductsOverviewPage = lazy(() => import('@/pages/ProductsOverviewPage'));
 const GelatoBlankProductsPage = lazy(() => import('@/pages/GelatoBlankProductsPage'));
 const AdminUploadPage = lazy(() => import('@/pages/AdminUploadPage'));
-const AdminVisualOptimizerPage = lazy(() => import('@/pages/AdminVisualOptimizerPage'));
 
-const NikeHeroDemoPage = lazy(() => import('@/pages/NikeHeroDemoPage'));
-const NikeTambePage = lazy(() => import('@/pages/NikeTambePage'));
+const NikeTambePage = lazy(() => import('@/pages/NikeTambePage.jsx'));
 const AdidasDemoPage = lazy(() => import('@/pages/AdidasDemoPage'));
 const AdidasStripeZoomDevPage = lazy(() => import('@/pages/AdidasStripeZoomDevPage'));
 const DevLinksPage = lazy(() => import('@/pages/DevLinksPage'));
@@ -96,15 +92,8 @@ function App() {
   const [selectedContainerToken, setSelectedContainerToken] = useState('');
   const [copyContainerStatus, setCopyContainerStatus] = useState('idle');
   const [selectionStatus, setSelectionStatus] = useState('idle');
-  const [layoutInspectorEnabled, setLayoutInspectorEnabled] = useState(true);
-  const [debugCaptureClicks, setDebugCaptureClicks] = useState(() => {
-    try {
-      const saved = localStorage.getItem('debugCaptureClicks');
-      return saved === null ? false : JSON.parse(saved);
-    } catch {
-      return false;
-    }
-  });
+  const [layoutInspectorEnabled, setLayoutInspectorEnabled] = useState(false);
+  const [debugCaptureClicks, setDebugCaptureClicks] = useState(false);
   const [guidesEnabled, setGuidesEnabled] = useState(false);
   const debugButtonsWrapRef = useRef(null);
   const [debugButtonsRect, setDebugButtonsRect] = useState({ left: 16, top: 0, width: 150, height: 60 });
@@ -114,14 +103,7 @@ function App() {
   const [contentContainerLeft, setContentContainerLeft] = useState(null);
   const [contentContainerRight, setContentContainerRight] = useState(null);
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
-  const [layoutInspectorPickEnabled, setLayoutInspectorPickEnabled] = useState(() => {
-    try {
-      const saved = localStorage.getItem('layoutInspectorPickEnabled');
-      return saved === null ? true : JSON.parse(saved);
-    } catch {
-      return true;
-    }
-  });
+  const [layoutInspectorPickEnabled, setLayoutInspectorPickEnabled] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -131,6 +113,18 @@ function App() {
   const { tools, toggleTool } = useAdminTools();
   const { enabled: offersEnabled, loading: offersLoading } = useOffersConfig();
   const { shouldRedirect, redirectUrl, loading: redirectLoading } = useGlobalRedirect(bypassUnderConstruction);
+
+  useEffect(() => {
+    try {
+      localStorage.removeItem('debugCaptureClicks');
+      localStorage.removeItem('layoutInspectorPickEnabled');
+      localStorage.removeItem('adminTools');
+      localStorage.removeItem('NIKE_DEMO_MANUAL');
+      localStorage.removeItem('NIKE_DEMO_PHASE');
+    } catch {
+      // ignore
+    }
+  }, []);
 
   useEffect(() => {
     window.__GLOBAL_REDIRECT_STATE__ = {
@@ -227,7 +221,7 @@ function App() {
 
     // If global redirect is enabled and an external target is configured,
     // always send non-admin routes (including /ec-preview) outside.
-    if (shouldRedirect && hasExternalTarget && !isAdminRoute) {
+    if (shouldRedirect && hasExternalTarget && !isAdminRoute && !isECPreview) {
       if ((import.meta?.env?.DEV || isLocalhost) && !enableInDev) {
         return;
       }
@@ -248,8 +242,8 @@ function App() {
     }
   }, [shouldRedirect, redirectUrl, redirectLoading, location.pathname, navigate, bypassUnderConstruction]);
 
-  const isNikeDemoRoute = location.pathname === '/nike-hero-demo' || location.pathname === '/nike-tambe';
-  const isNikeHeroDemoRoute = location.pathname === '/nike-hero-demo';
+  const isNikeDemoRoute = location.pathname === '/nike-tambe';
+  const isNikeHeroDemoRoute = false;
   const isAdidasDemoRoute = location.pathname === '/adidas-demo' || location.pathname.startsWith('/adidas-demo/');
   const isDevDemoRoute = isNikeDemoRoute || isAdidasDemoRoute;
   const layoutInspectorActive = (isAdmin || isDevDemoRoute) && location.pathname !== '/ec-preview' && layoutInspectorEnabled;
@@ -452,12 +446,16 @@ function App() {
     };
 
     const onPointerDown = (e) => {
-      if (!(e.target instanceof Element)) return;
+      if (!layoutInspectorActive) {
+        return;
+      }
       const toolbar = debugButtonsWrapRef.current;
       if (toolbar && toolbar.contains(e.target)) return;
+      if (e.target && e.target.closest && e.target.closest('.debug-exempt,[data-debug-exempt="true"]')) return;
       if (isDevOverlay(e.target)) return;
       if (typeof e.clientX !== 'number' || typeof e.clientY !== 'number') return;
       const main = document.getElementById('main-content');
+      if (!(main && e.target instanceof Element && main.contains(e.target))) return;
       const pickedFromPoint = pickElementInMain(e.clientX, e.clientY);
       const pickedFromTarget = (main && main.contains(e.target) && !isDevOverlay(e.target) && !isFixedElement(e.target)) ? e.target : null;
       const picked = pickedFromPoint || pickedFromTarget;
@@ -466,7 +464,7 @@ function App() {
         return;
       }
 
-      if (debugCaptureClicks) {
+      if (layoutInspectorPickEnabled && debugCaptureClicks) {
         e.preventDefault();
         e.stopPropagation();
       }
@@ -488,10 +486,15 @@ function App() {
     };
 
     const onClickCapture = (e) => {
+      if (!layoutInspectorPickEnabled) return;
       if (!debugCaptureClicks) return;
       if (!(e.target instanceof Element)) return;
+      const main = document.getElementById('main-content');
+      if (!(main && main.contains(e.target))) return;
+      if (isFixedElement(e.target)) return;
       const toolbar = debugButtonsWrapRef.current;
       if (toolbar && toolbar.contains(e.target)) return;
+      if (e.target.closest('.debug-exempt,[data-debug-exempt="true"]')) return;
       if (isDevOverlay(e.target)) return;
       e.preventDefault();
       e.stopPropagation();
@@ -628,13 +631,18 @@ function App() {
     isHeroSettingsDevRoute ||
     (isDevDemoRoute && !isAdidasDemoRoute && !isNikeHeroDemoRoute);
 
+  const isAdminStudioRoute = location.pathname.startsWith('/admin/studio');
+  const devHeaderVisible = !isFullScreenRoute && (isDevHeaderRoute || isAdminStudioRoute);
+
   const offersHeaderVisible = !isAdminRoute && !isFullScreenRoute && !isDevLayoutRoute && offersEnabled && !offersLoading;
 
   const baseHeaderHeight = isLargeScreen ? 80 : 64;
   const heroSettingsDevHeaderHeight = isDevHeaderRoute ? baseHeaderHeight : 0;
   const offersHeaderHeight = offersHeaderVisible ? 40 : 0;
-  const adminBannerVisible = isAdmin || isDevDemoRoute;
+  const adminBannerVisible = isAdmin || isDevDemoRoute || isAdminRoute;
   const adminBannerHeight = adminBannerVisible ? 40 : 0;
+  const adminRouteDevHeaderHeight = (isAdminRoute && devHeaderVisible) ? baseHeaderHeight : 0;
+  const adminRouteOffset = `${adminBannerHeight + adminRouteDevHeaderHeight}px`;
   const appHeaderOffset = `${(isDevHeaderRoute ? heroSettingsDevHeaderHeight : baseHeaderHeight) + offersHeaderHeight + adminBannerHeight}px`;
   const adidasHeaderOffset = `${adminBannerHeight}px`;
 
@@ -650,11 +658,9 @@ function App() {
         <OffersHeader adminBannerVisible={adminBannerVisible} />
       )}
 
-      {!isFullScreenRoute && !isAdminRoute && isDevHeaderRoute && (
-        <div className="fixed left-0 right-0 top-[40px] z-[20000] bg-white border-b border-gray-200">
+      {devHeaderVisible && (
+        <div className="fixed left-0 right-0 z-[20000] bg-white border-b border-gray-200" style={{ top: `${adminBannerHeight}px` }}>
           <div className="max-w-[1400px] mx-auto px-6 md:px-12 h-16 lg:h-20 flex items-center gap-2 text-xs text-gray-700">
-            <button type="button" onClick={() => navigate('/nike-hero-demo')} className="hover:text-black">Nike Hero</button>
-            <span className="text-gray-300">/</span>
             <button type="button" onClick={() => navigate('/nike-tambe')} className="hover:text-black">Nike També</button>
             <span className="text-gray-300">/</span>
             <button type="button" onClick={() => navigate('/adidas-demo')} className="hover:text-black">Adidas</button>
@@ -687,10 +693,10 @@ function App() {
 
         <main
           id="main-content"
-          className={`flex-grow ${isAdminRoute ? 'overflow-y-auto' : ''} ${!isFullScreenRoute ? 'transition-[padding-top] duration-[350ms] ease-[cubic-bezier(0.32,0.72,0,1)]' : ''} ${layoutInspectorActive ? 'debug-containers' : ''}`}
+          className={`flex-grow ${isAdminRoute ? 'overflow-y-auto' : ''} ${!isFullScreenRoute ? 'transition-[padding-top] duration-[350ms] ease-[cubic-bezier(0.32,0.72,0,1)]' : ''} ${(layoutInspectorActive && layoutInspectorPickEnabled) ? 'debug-containers' : ''}`}
           style={!isFullScreenRoute ? (
             isAdminRoute
-              ? { paddingTop: '40px', '--appHeaderOffset': '40px' }
+              ? { paddingTop: adminRouteOffset, '--appHeaderOffset': adminRouteOffset }
               : {
                   paddingTop: isAdidasDemoRoute ? adidasHeaderOffset : appHeaderOffset,
                   '--appHeaderOffset': isAdidasDemoRoute ? adidasHeaderOffset : appHeaderOffset,
@@ -740,7 +746,7 @@ function App() {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                   >
-                    <ProvesCollectionPage {...pageProps} />
+                    <SupabaseCollectionRoute collectionKey="proves" {...pageProps} />
                   </motion.div>
                 } />
 
@@ -753,7 +759,7 @@ function App() {
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                     >
-                      <ProvesProductDetailPage {...pageProps} />
+                      <ProductDetailPage {...pageProps} />
                     </motion.div>
                   }
                 />
@@ -886,7 +892,6 @@ function App() {
                 <Route path="/adidas-demo" element={<AdidasDemoPage />} />
                 <Route path="/adidas-stripe-zoom-dev" element={<AdidasStripeZoomDevPage />} />
                 <Route path="/dev-links" element={<DevLinksPage />} />
-                <Route path="/nike-hero-demo" element={<NikeHeroDemoPage />} />
                 <Route path="/nike-tambe" element={<NikeTambePage />} />
                 <Route path="/status" element={<OrderStatusPage />} />
                 <Route path="/track" element={<OrderTrackingPage />} />
@@ -909,7 +914,9 @@ function App() {
                 <Route path="/admin-login" element={<AdminLoginPage />} />
 
                 {/* Admin Studio - Multi-page under /admin/... */}
-                <Route path="/admin" element={<AdminStudioLayout />}>
+                <Route path="/admin" element={<AdminDemosPage />} />
+
+                <Route path="/admin/studio" element={<AdminStudioLayout />}>
                   <Route index element={<AdminStudioHomePage />} />
                   <Route path="demos" element={<AdminDemosPage />} />
                   <Route path="index" element={<IndexPage />} />
@@ -917,31 +924,31 @@ function App() {
                   <Route path="ec-config" element={<ECConfigPage />} />
                   <Route path="system-messages" element={<SystemMessagesPage />} />
                   <Route path="media" element={<AdminMediaPage />} />
-                  <Route path="visual-optimizer" element={<AdminVisualOptimizerPage />} />
                   <Route path="hero" element={<HeroSettingsPage />} />
                   <Route path="collections" element={<ColleccioSettingsPage {...pageProps} />} />
                   <Route path="mockups" element={<MockupsManagerPage />} />
                   <Route path="upload" element={<AdminUploadPage />} />
-                  <Route path="gelato-sync" element={<GelatoProductsManagerPage />} />
-                  <Route path="gelato-blank" element={<GelatoBlankProductsPage />} />
-                  <Route path="products-overview" element={<ProductsOverviewPage />} />
-                  <Route path="gelato-templates" element={<GelatoTemplatesPage />} />
-                  <Route path="apps" element={<AppsPage />} />
-                  <Route path="documentation" element={<DocumentationPage />} />
                   <Route path="fulfillment" element={<FulfillmentPage />} />
                   <Route path="fulfillment-settings" element={<FulfillmentSettingsPage />} />
+                  <Route path="gelato-sync" element={<GelatoProductsManagerPage />} />
+                  <Route path="gelato-blank" element={<GelatoBlankProductsPage />} />
+                  <Route path="gelato-templates" element={<GelatoTemplatesPage />} />
+                  <Route path="products-overview" element={<ProductsOverviewPage />} />
+                  <Route path="draft" element={<Navigate to="/admin/studio" replace />} />
+                  <Route path="draft/fulfillment-settings" element={<FulfillmentSettingsPage />} />
+                  <Route path="draft/mockup-settings" element={<Navigate to="/admin/studio" replace />} />
                 </Route>
 
                 {/* Legacy admin routes -> redirects to Admin Studio */}
-                <Route path="/index" element={<Navigate to="/admin/index" replace />} />
-                <Route path="/promotions" element={<Navigate to="/admin/promotions" replace />} />
-                <Route path="/ec-config" element={<Navigate to="/admin/ec-config" replace />} />
-                <Route path="/system-messages" element={<Navigate to="/admin/system-messages" replace />} />
+                <Route path="/index" element={<Navigate to="/admin/studio/index" replace />} />
+                <Route path="/promotions" element={<Navigate to="/admin/studio/promotions" replace />} />
+                <Route path="/ec-config" element={<Navigate to="/admin/studio/ec-config" replace />} />
+                <Route path="/system-messages" element={<Navigate to="/admin/studio/system-messages" replace />} />
                 <Route path="/hero-settings" element={<HeroSettingsPage />} />
-                <Route path="/colleccio-settings" element={<Navigate to="/admin/collections" replace />} />
-                <Route path="/mockups" element={<Navigate to="/admin/mockups" replace />} />
-                <Route path="/fulfillment" element={<Navigate to="/admin/fulfillment" replace />} />
-                <Route path="/fulfillment-settings" element={<Navigate to="/admin/fulfillment-settings" replace />} />
+                <Route path="/colleccio-settings" element={<Navigate to="/admin/studio/collections" replace />} />
+                <Route path="/mockups" element={<Navigate to="/admin/studio/mockups" replace />} />
+                <Route path="/fulfillment" element={<Navigate to="/admin/studio/fulfillment" replace />} />
+                <Route path="/fulfillment-settings" element={<Navigate to="/admin/studio/fulfillment-settings" replace />} />
 
                 <Route path="/fulfillment/:id" element={
                   <motion.div
