@@ -8,7 +8,6 @@
 
     "allowJs": true,
     "checkJs": false,
-
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
