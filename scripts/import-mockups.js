@@ -73,23 +73,23 @@ function buildRowFromCanonicalAStorageKey(key, options = {}) {
   const parts = clean.split('/').filter(Boolean);
   if (parts.length < 4) return { ok: false, reason: 'not_canonical_depth', file_path: clean };
 
+  // Ignore non-mockup assets that may live in the same bucket.
+  // These paths are not meant to be parsed as mockups inventory.
+  const rootPrefix = (parts[0] || '').toString().trim().toLowerCase();
+  if (rootPrefix === 'products') return { ok: false, reason: 'ignored_products_prefix', file_path: clean };
+  if (rootPrefix === 'proves') return { ok: false, reason: 'ignored_proves_prefix', file_path: clean };
+
   const collection = toCanonicalCollection(parts[0]);
-  const baseFolder = normalizeLegacyBaseColor(parts[1]);
-  const drawingFolder = normalizeDrawingColorToDb(parts[2]);
   const fileName = parts[parts.length - 1];
+
+  // Canonical-A expected layout (new): {collection}/{base_color}/{drawing_color}/{file}
+  // Legacy layout observed in exports: {collection}/{design_folder}/{drawing_color}/{file}
+  // Example: first_contact/ncc_1701/blanc/first-contact-ncc-1701-white-black.png
+  let baseFolder = normalizeLegacyBaseColor(parts[1]);
+  let drawingFolder = normalizeDrawingColorToDb(parts[2]);
 
   if (!collection) return { ok: false, reason: 'missing_collection', file_path: clean };
   if (!isLikelyFileName(fileName)) return { ok: false, reason: 'not_image', file_path: clean };
-  if (!baseFolder) return { ok: false, reason: 'missing_base_folder', file_path: clean };
-  if (!drawingFolder) return { ok: false, reason: 'missing_drawing_folder', file_path: clean };
-
-  if (tshirtColorsSet && !tshirtColorsSet.has(baseFolder)) {
-    // Not an official base color folder for tshirt -> treat as legacy/non-official.
-    return { ok: false, reason: 'non_official_base_folder', file_path: clean };
-  }
-  if (!['white', 'black'].includes(drawingFolder)) {
-    return { ok: false, reason: 'non_official_drawing_folder', file_path: clean };
-  }
 
   const withoutExt = path.basename(fileName, path.extname(fileName));
   const tokens = withoutExt.split('-').filter(Boolean);
@@ -105,6 +105,41 @@ function buildRowFromCanonicalAStorageKey(key, options = {}) {
     designTokens = designTokens.slice(1);
   }
   const design_name = designTokens.join('-');
+
+  // If parts[1] is not a base color folder (legacy layout), recover base/drawing from filename.
+  // We treat folder drawing (parts[2]) as drawing color when it is blanc/negre.
+  const folderDrawingIsInk = ['white', 'black'].includes(drawingFolder);
+  const looksLikeLegacy = baseFolder && tshirtColorsSet && !tshirtColorsSet.has(baseFolder) && folderDrawingIsInk;
+  if (looksLikeLegacy) {
+    baseFolder = baseFromName;
+    drawingFolder = drawingFromName || drawingFolder;
+  }
+
+  // Legacy layout 2: {collection}/{design_folder}/{base_color}/{file}
+  // Example: outcasted/arthur-d.-the-second/forest/outcasted-arthur-d.-the-second-black-forest.png
+  // In this case parts[1] is design, parts[2] is base color. Drawing color comes from filename.
+  const folderBaseCandidate = normalizeLegacyBaseColor(parts[2]);
+  const looksLikeLegacyBaseInThirdSegment =
+    tshirtColorsSet &&
+    baseFolder &&
+    !tshirtColorsSet.has(baseFolder) &&
+    folderBaseCandidate &&
+    tshirtColorsSet.has(folderBaseCandidate);
+  if (looksLikeLegacyBaseInThirdSegment) {
+    baseFolder = folderBaseCandidate;
+    drawingFolder = drawingFromName || drawingFolder;
+  }
+
+  if (!baseFolder) return { ok: false, reason: 'missing_base_folder', file_path: clean };
+  if (!drawingFolder) return { ok: false, reason: 'missing_drawing_folder', file_path: clean };
+
+  if (tshirtColorsSet && !tshirtColorsSet.has(baseFolder)) {
+    // Not an official base color folder for tshirt -> treat as legacy/non-official.
+    return { ok: false, reason: 'non_official_base_folder', file_path: clean };
+  }
+  if (!['white', 'black'].includes(drawingFolder)) {
+    return { ok: false, reason: 'non_official_drawing_folder', file_path: clean };
+  }
 
   if (baseFromName && baseFromName !== baseFolder) {
     return { ok: false, reason: 'base_mismatch', file_path: clean, base_folder: baseFolder, base_name: baseFromName };
