@@ -11,8 +11,8 @@ export default function ECPreviewLitePage() {
 
   const redirectUrl = (params.get('redirect') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_REDIRECT_URL || '').trim();
   const backgroundType = (params.get('bg') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_BG || 'video');
-  const videoUrl = (params.get('video') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_VIDEO_URL || '');
-  const imageUrl = (params.get('image') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_IMAGE_URL || '');
+  const videoUrl = (params.get('video') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_VIDEO_URL || '').trim();
+  const imageUrl = (params.get('image') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_IMAGE_URL || '').trim();
   const backgroundColor = (params.get('bgColor') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_BG_COLOR || '#000000');
 
   const title = (params.get('title') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_TITLE || '');
@@ -27,6 +27,12 @@ export default function ECPreviewLitePage() {
 
   const redirectMode = (params.get('redirectMode') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_REDIRECT_MODE || 'onEnd');
   const textColor = (params.get('textColor') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_TEXT_COLOR || '#ffffff');
+
+  const effectiveBackgroundType = useMemo(() => {
+    if (backgroundType === 'video' && !videoUrl) return 'color';
+    if (backgroundType === 'image' && !imageUrl) return 'color';
+    return backgroundType;
+  }, [backgroundType, videoUrl, imageUrl]);
 
   const shouldAutoRedirect = redirectMode === 'immediate' || redirectMode === 'onEnd';
 
@@ -83,7 +89,7 @@ export default function ECPreviewLitePage() {
       </Helmet>
 
       <div className="relative w-full h-screen overflow-hidden cursor-pointer" onClick={handleScreenClick}>
-        {backgroundType === 'video' && videoUrl && (
+        {effectiveBackgroundType === 'video' && videoUrl && (
           <video
             className="absolute inset-0 w-full h-full object-cover pointer-events-none"
             style={{ filter: 'contrast(1.5)', zIndex: 0 }}
@@ -97,14 +103,14 @@ export default function ECPreviewLitePage() {
           />
         )}
 
-        {backgroundType === 'image' && imageUrl && (
+        {effectiveBackgroundType === 'image' && imageUrl && (
           <div
             className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${imageUrl})` }}
           />
         )}
 
-        {(backgroundType === 'color' || !backgroundType) && (
+        {(effectiveBackgroundType === 'color' || !effectiveBackgroundType) && (
           <div className="absolute inset-0 w-full h-full" style={{ backgroundColor }} />
         )}
 

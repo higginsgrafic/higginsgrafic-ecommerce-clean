@@ -42,7 +42,7 @@ if ('serviceWorker' in navigator) {
   if (import.meta.env.PROD) {
     const pathname = (typeof window !== 'undefined' ? window.location?.pathname : '') || '';
     const search = (typeof window !== 'undefined' ? window.location?.search : '') || '';
-    const bypassSW = pathname === '/ec-preview' || /[?&]no_sw=1\b/.test(search);
+    const bypassSW = pathname === '/ec-preview' || pathname === '/ec-preview-lite' || /[?&]no_sw=1\b/.test(search);
 
     if (bypassSW) {
       // /ec-preview is a live iteration surface; SW caching can serve stale JS/CSS and break rapid fixes.
