@@ -9,8 +9,8 @@ export default function ECPreviewLitePage() {
 
   const params = useMemo(() => new URLSearchParams(location.search || ''), [location.search]);
 
-  const redirectUrl = (params.get('redirect') || '').trim();
-  const backgroundType = (params.get('bg') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_BG || 'color');
+  const redirectUrl = (params.get('redirect') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_REDIRECT_URL || '').trim();
+  const backgroundType = (params.get('bg') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_BG || 'video');
   const videoUrl = (params.get('video') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_VIDEO_URL || '');
   const imageUrl = (params.get('image') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_IMAGE_URL || '');
   const backgroundColor = (params.get('bgColor') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_BG_COLOR || '#000000');
@@ -23,9 +23,9 @@ export default function ECPreviewLitePage() {
   const showButton = showButtonRaw === '1' || showButtonRaw.toLowerCase() === 'true';
 
   const buttonText = (params.get('buttonText') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_BUTTON_TEXT || '');
-  const buttonLink = (params.get('buttonLink') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_BUTTON_LINK || '/');
+  const buttonLink = (params.get('buttonLink') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_BUTTON_LINK || redirectUrl || '/');
 
-  const redirectMode = (params.get('redirectMode') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_REDIRECT_MODE || 'none');
+  const redirectMode = (params.get('redirectMode') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_REDIRECT_MODE || 'onEnd');
   const textColor = (params.get('textColor') || '').trim() || String(import.meta.env.VITE_EC_PREVIEW_LITE_TEXT_COLOR || '#ffffff');
 
   const shouldAutoRedirect = redirectMode === 'immediate' || redirectMode === 'onEnd';
@@ -63,7 +63,7 @@ export default function ECPreviewLitePage() {
   const handleScreenClick = () => {
     if (showButton) return;
 
-    const target = String(buttonLink || '').trim();
+    const target = String(redirectUrl || buttonLink || '').trim();
     if (!target) return;
 
     if (target.startsWith('http://') || target.startsWith('https://')) {
