@@ -219,7 +219,7 @@ export default function UnderConstructionEditor() {
         </div>
         <div className="flex gap-2">
           <Button
-            onClick={() => window.open('/ec-preview', '_blank')}
+            onClick={() => window.open('/ec-preview-lite', '_blank')}
             variant="outline"
             size="sm"
           >
