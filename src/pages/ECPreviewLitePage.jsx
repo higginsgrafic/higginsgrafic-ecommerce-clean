@@ -88,7 +88,7 @@ export default function ECPreviewLitePage() {
         <meta name="description" content="Pàgina en construcció" />
       </Helmet>
 
-      <div className="relative w-full h-screen overflow-hidden cursor-pointer" onClick={handleScreenClick}>
+      <div className="relative w-full h-screen overflow-hidden cursor-pointer" onClick={handleScreenClick} style={{ backgroundColor }}>
         {effectiveBackgroundType === 'video' && videoUrl && (
           <video
             className="absolute inset-0 w-full h-full object-cover pointer-events-none"
@@ -98,9 +98,11 @@ export default function ECPreviewLitePage() {
             playsInline
             preload="auto"
             loop={!(redirectUrl && shouldAutoRedirect && redirectMode === 'onEnd')}
-            src={videoUrl}
+            crossOrigin="anonymous"
             onEnded={handleVideoEnd}
-          />
+          >
+            <source src={videoUrl} type="video/mp4" />
+          </video>
         )}
 
         {effectiveBackgroundType === 'image' && imageUrl && (
