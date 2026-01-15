@@ -318,22 +318,6 @@ function ECPreviewPage() {
         className="relative w-full h-screen overflow-hidden cursor-pointer"
         onClick={handleScreenClick}
       >
-        <div
-          className="fixed bottom-0 right-0 z-[2147483647]"
-          style={{ width: 220, height: 90, pointerEvents: 'auto', background: '#000000' }}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          onMouseDown={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          onTouchStart={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-        />
         {showDevNote && (
           <div className="fixed inset-0 z-20 flex items-center justify-center pointer-events-none">
             <div
