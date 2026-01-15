@@ -58,6 +58,7 @@ const AdminStudioHomePage = lazy(() => import('@/pages/AdminStudioHomePage'));
 const AdminDemosPage = lazy(() => import('@/pages/AdminDemosPage'));
 const IndexPage = lazy(() => import('@/pages/IndexPage'));
 const ECPreviewPage = lazy(() => import('@/pages/ECPreviewPage'));
+const ECPreviewLitePage = lazy(() => import('@/pages/ECPreviewLitePage'));
 const PromotionsManagerPage = lazy(() => import('@/pages/PromotionsManagerPage'));
 const ECConfigPage = lazy(() => import('@/pages/ECConfigPage'));
 const SystemMessagesPage = lazy(() => import('@/pages/SystemMessagesPage'));
@@ -217,12 +218,13 @@ function App() {
                          location.pathname.startsWith('/fulfillment/') ||
                          location.pathname.startsWith('/admin');
     const isECPreview = location.pathname === '/ec-preview';
+    const isECPreviewLite = location.pathname === '/ec-preview-lite';
 
     const hasExternalTarget = !!redirectUrl && /^https?:\/\//i.test(redirectUrl);
 
     // If global redirect is enabled and an external target is configured,
-    // always send non-admin routes (including /ec-preview) outside.
-    if (shouldRedirect && hasExternalTarget && !isAdminRoute && !isECPreview) {
+    // always send non-admin routes outside.
+    if (shouldRedirect && hasExternalTarget && !isAdminRoute && !isECPreview && !isECPreviewLite) {
       if ((import.meta?.env?.DEV || isLocalhost) && !enableInDev) {
         return;
       }
@@ -230,14 +232,14 @@ function App() {
       return;
     }
 
-    // Si hem de redirigir i no estem en una ruta admin ni ja a ec-preview
-    if (shouldRedirect && !isAdminRoute && !isECPreview) {
-      navigate('/ec-preview', { replace: true });
+    // Si hem de redirigir i no estem en una ruta admin ni ja a ec-preview-lite
+    if (shouldRedirect && !isAdminRoute && !isECPreviewLite) {
+      navigate('/ec-preview-lite', { replace: true });
       return;
     }
 
-    // Si NO hem de redirigir però estem a ec-preview, sortim
-    if (!shouldRedirect && isECPreview) {
+    // Si NO hem de redirigir però estem a ec-preview-lite, sortim
+    if (!shouldRedirect && isECPreviewLite) {
       navigate('/', { replace: true });
       return;
     }
@@ -906,6 +908,17 @@ function App() {
                     transition={{ duration: 0.5 }}
                   >
                     <ECPreviewPage />
+                  </motion.div>
+                } />
+
+                <Route path="/ec-preview-lite" element={
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <ECPreviewLitePage />
                   </motion.div>
                 } />
 
