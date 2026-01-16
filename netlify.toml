@@ -38,11 +38,35 @@
   status = 200
 
 [[redirects]]
+  from = "/ec-preview-lite"
+  to = "/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/ec-preview-lite/*"
+  to = "/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/ec-preview"
+  to = "/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/ec-preview/*"
+  to = "/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/higginsgrafic.com/*"
   to = "/index.html"
   status = 200
 
 [[redirects]]
-  from = "/*"
+  from = "/"
   to = "https://www.etsy.com/shop/HigginsGrafic"
   status = 302
