@@ -9,6 +9,8 @@ import ProductMockups from '@/components/ProductMockups';
 import EpisodeControls from '@/components/EpisodeControls';
 import EpisodeDisplay from '@/components/EpisodeDisplay';
 import SEOProductSchema from '@/components/SEOProductSchema';
+import ProductTeaserCard from '@/components/ProductTeaserCard';
+import TEPASection from '@/components/TEPASection';
 import { trackProductView, trackAddToCart, trackAddToWishlist, trackShare } from '@/utils/analytics';
 import { useProductContext } from '@/contexts/ProductContext';
 import { useToast } from '@/contexts/ToastContext';
@@ -1032,6 +1034,20 @@ const ProductDetailPage = ({ onAddToCart, cartItems = [], onUpdateQuantity, lang
     )
   ).slice(0, 4);
 
+  const TEPAProducts = useMemo(() => {
+    const list = Array.isArray(products) ? products : [];
+    const currentId = product?.id;
+    if (!currentId) return [];
+
+    return list
+      .filter((p) => p && p.id && p.id !== currentId)
+      .filter((p) => {
+        if (!product?.collection) return true;
+        return p.collection === product.collection;
+      })
+      .slice(0, 8);
+  }, [products, product?.id, product?.collection]);
+
   const isTepaEnabled = false;
 
   useEffect(() => {
@@ -1281,11 +1297,11 @@ const ProductDetailPage = ({ onAddToCart, cartItems = [], onUpdateQuantity, lang
         </div>
       )}
 
-      {isTepaEnabled && relatedCollections.length > 0 && (
+      {isTEPAEnabled && relatedCollections.length > 0 && (
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="border-t border-gray-200 pt-12">
             <h2 className="font-roboto text-2xl sm:text-3xl font-normal uppercase mb-8" style={{ color: '#141414' }}>
-              També et podria agradar
+              Col·leccions
             </h2>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 items-center">
               {relatedCollections.map((collection) => (
@@ -1313,6 +1329,35 @@ const ProductDetailPage = ({ onAddToCart, cartItems = [], onUpdateQuantity, lang
             </div>
           </div>
         </div>
+      )}
+
+      {isTepaEnabled && TEPAProducts.length > 0 && (
+        <TEPASection title="també et pot agradar">
+          {TEPAProducts.slice(0, 3).map((p) => {
+            const productId = p?.id;
+            const productSlugOrId = p?.slug || productId;
+            const productUrl = productSlugOrId ? `/product/${productSlugOrId}` : '/';
+            const name = p?.name || '';
+            const subtitle = getNikeSubtitle(p);
+            const img = p?.image || p?.images?.[0] || p?.variants?.find((v) => v?.image)?.image || '/placeholder-product.svg';
+            const status = getNikeStatus(p);
+            const colors = getUniqueColors(p);
+
+            return (
+              <ProductTeaserCard
+                key={productId || productSlugOrId}
+                to={productUrl}
+                imgSrc={img}
+                name={name}
+                subtitle={subtitle}
+                status={status}
+                colors={colors}
+                price={p?.price}
+                colorDotStyle={colorDotStyle}
+              />
+            );
+          })}
+        </TEPASection>
       )}
     </div>
 </>
